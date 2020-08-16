@@ -7,34 +7,42 @@
 	  		<ul id="trending">
 	  		<?php
 	  			//include 'includes/session.php'
-	  			$now = $_SESSION['user'];
-	  			$conn = $pdo->open();
-	  			//$category_id = $_POST['category_id'];
-	  			//$id = $_POST['id'];
-	  			$suggest = 1;
-	  			$stmt = $conn->prepare("SELECT * FROM cart WHERE user_id=:user_id");
-	  			$stmt->execute(['user_id'=>$now]);
+		  		if (isset($_SESSION['user'])) {
+		  			$now = $_SESSION['user'];
+		  			$conn = $pdo->open();
+		  			//$category_id = $_POST['category_id'];
+		  			//$id = $_POST['id'];
+		  			$suggest = 1;
+		  			$stmt = $conn->prepare("SELECT * FROM cart WHERE user_id=:user_id");
+		  			$stmt->execute(['user_id'=>$now]);
 
-	  			foreach ($stmt as $row) {
-	  				$product_id = $row['product_id'];
-	  				$stmt1 = $conn->prepare("SELECT * FROM predict WHERE id_product1=:product_id");
-	  				$stmt1->execute(['product_id'=>$product_id]);
-	  				foreach ($stmt1 as $key) {
-	  					$product_id1 = $key['id_product2'];
-	  					$stmt11 = $conn->prepare("SELECT * FROM products WHERE id=:id");
-	  					$stmt11->execute(['id'=>$product_id1]);
+		  			foreach ($stmt as $row) {
+		  				$product_id = $row['product_id'];
+		  				$stmt1 = $conn->prepare("SELECT * FROM predict WHERE id_product1=:product_id");
+		  				$stmt1->execute(['product_id'=>$product_id]);
+		  				foreach ($stmt1 as $key) {
+		  					$product_id1 = $key['id_product2'];
+		  					$stmt11 = $conn->prepare("SELECT * FROM products WHERE id=:id");
+		  					$stmt11->execute(['id'=>$product_id1]);
 
-	  					foreach ($stmt11 as $key1);
-	  					echo "<li><a href='product.php?product=".$key1['id']."'>".$key1['name']."</a></li>";
+		  					$product_id3 = $key['id_product3'];
+		  					$stmt13 = $conn->prepare("SELECT * FROM products WHERE id=:id");
+		  					$stmt13->execute(['id'=>$product_id3]);
 
+		  					foreach ($stmt11 as $key1);
+		  					echo "<li><a href='product.php?product=".$key1['id']."'>".$key1['name']."</a></li>";
 
-	  					
-	  				}
-	  				
-				}  
-
-					//echo "<li><a href='product.php?product=".$row['slug']."'>".$row['name']."</a></li>";
-	  			$pdo->close();
+		  					foreach ($stmt13 as $key3);
+		  					echo "<li><a href='product.php?product=".$key3['id']."'>".$key3['name']."</a></li>";
+		  					
+		  				}
+		  				
+					}  
+		  			$pdo->close();
+		  		}
+		  		else{
+		  			echo "<a href='login.php'>Anda Harus Login dahulu</a>";
+		  		}
 	  		?>
 	    	<ul>
 	  	</div>

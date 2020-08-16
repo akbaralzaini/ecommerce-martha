@@ -31,8 +31,10 @@
 	        		</div>
 	        		<?php
 	        			if(isset($_SESSION['user'])){
+	        				$date = date('Ymd');
+	        				$a = "PAY".mt_rand(1000,9999)."-".$_SESSION['user']."".$date;
 	        				echo "
-	        					<div id='paypal-button'></div>
+	        					<a href='sales.php?pay=$a' class='btn btn-success'>Beli</a>
 	        				";
 	        			}
 	        			else{
