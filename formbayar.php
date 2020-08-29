@@ -71,21 +71,13 @@
 	        			</div>
 	        			<div class="box-body">
 	        				<table class="table table-bordered" id="example1">
-	        					<thead>
-	        						<th class="hidden"></th>
-	        						<th>Date</th>
-	        						<th>Transaction#</th>
-	        						<th>Amount</th>
-	        						<th>Status</th>
-	        						<th>Full Details</th>
-	        					</thead>
 	        					<tbody>
 	        					<?php
 	        						$conn = $pdo->open();
 
 	        						try{
-	        							$stmt = $conn->prepare("SELECT * FROM sales WHERE user_id=:user_id ORDER BY sales_date DESC");
-	        							$stmt->execute(['user_id'=>$user['id']]);
+	        							$stmt = $conn->prepare("SELECT * FROM sales WHERE id=:id ORDER BY sales_date DESC");
+	        							$stmt->execute(['id'=>$_GET['id']]);
 	        							foreach($stmt as $row){
 	        								$stmt2 = $conn->prepare("SELECT * FROM details LEFT JOIN products ON products.id=details.product_id WHERE sales_id=:id");
 	        								$stmt2->execute(['id'=>$row['id']]);
@@ -95,16 +87,16 @@
 	        									$total += $subtotal;
 	        								}
 	        								echo "
-	        									<tr>
-	        										<td class='hidden'></td>
-	        										<td>".date('M d, Y', strtotime($row['sales_date']))."</td>
-	        										<td>".$row['pay_id']."</td>
-	        										<td>Rp. ".number_format($total, 2)."</td>
-	        										<td>".$row['status']."</td>
-	        										<td><button class='btn btn-sm btn-flat btn-info transact' data-id='".$row['id']."'><i class='fa fa-search'></i> View</button>
-	        										<a class='btn btn-success' href='formbayar.php?id=$row[id]'>Bayar</a>
-	        										</td>
-	        									</tr>
+	        										<tr>
+	        											<td>Date </td>
+	        											<td>".date('M d, Y', strtotime($row['sales_date']))."</td></tr>
+	        										<tr>
+	        											<td>ID Transaksi</td>
+	        											<td>".$row['pay_id']."</td></tr>
+	        										<tr>
+	        											<td>Jumlah bayar </td>
+	        											<td>Rp. ".number_format($total, 2)."</td></tr>
+	        										
 	        								";
 	        							}
 
@@ -115,6 +107,28 @@
 
 	        						$pdo->close();
 	        					?>
+	        					<form method="POST" action="update_payment.php?id=<?= $_GET['id'] ?>" enctype="multipart/form-data">
+		        					<tr>
+		        						<td>Bank</td>
+		        						<td>
+		        							<select class="form-control" name="bank" id="sel1">
+						                        <option value="MANDIRI">MANDIRI</option>
+						                        <option value="BCA">BCA</option>
+						                        <option value="BRI">BRI</option>
+						                        <option value="BNI">BNI</option>
+						                      </select>
+		        						</td>
+		        					</tr>
+		        					<tr>
+		        						<td>Bukti Bayar</td>
+		        						<td><input type="file" id="photo" name="photo"></td>
+		        					</tr>
+		        					<tr>
+		        						<td>
+		        						<input type="submit" name="bayar" class="btn btn-primary" value="Bayar">
+		        						</td>
+		        					</tr>
+	        					</form>
 	        					</tbody>
 	        				</table>
 	        			</div>

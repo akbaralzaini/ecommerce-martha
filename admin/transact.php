@@ -24,6 +24,8 @@
 				<td>Rp. ".number_format($subtotal, 2)."</td>
 			</tr>
 		";
+		$output['status'] = $row['status'];
+		$output['foto'] = $row['foto'];
 	}
 	
 	$output['total'] = '<b>Rp. '.number_format($total, 2).'<b>';

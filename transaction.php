@@ -24,8 +24,9 @@
 				<td>Rp. ".number_format($subtotal, 2)."</td>
 			</tr>
 		";
+		$output['status'] = $row['status'];
 	}
-	
+
 	$output['total'] = '<b>Rp. '.number_format($total, 2).'<b>';
 	$pdo->close();
 	echo json_encode($output);
